@@ -1,0 +1,31 @@
+.center {
+    text-align: center;
+}
+
+.todo {
+    /* display: flex; */
+    background-color: #1D2B53;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 5px;
+    border-radius: 8px;
+    box-shadow: 2px -2px 0px #f2f2f2;
+
+}
+
+.open {
+    display: flex;
+    justify-content: center;
+}
+
+.done {
+
+    background-color: rgb(4, 69, 118);
+    filter: grayscale(78%);
+}
+
+.cross {
+    text-decoration: line-through;
+    text-decoration-color: rgb(6, 7, 6);
+    text-decoration-thickness: 5px;
+}

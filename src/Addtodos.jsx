@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Button from "./Button";
+import "./Addtodos.css";
 function Addtodos({ setTodos }) {
   const [head, setHead] = useState(``);
   const [detail, setDetail] = useState(``);
@@ -28,10 +29,11 @@ function Addtodos({ setTodos }) {
     setPriority(null);
   }
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
+    <form onSubmit={handleSubmit} className="form">
+      <div className="gap">
         <label>Heading:</label>
         <input
+          className="inpadd"
           type="text"
           onChange={(e) => setHead(e.target.value)}
           placeholder="Enter heading..."
@@ -39,9 +41,10 @@ function Addtodos({ setTodos }) {
           required={true}
         ></input>
       </div>
-      <div>
-        <label>details:</label>
+      <div className="details gap">
+        <label>Details:</label>
         <input
+          className="inpadd inpdet"
           type="text"
           onChange={(e) => setDetail(e.target.value)}
           placeholder="Enter Details..."
@@ -49,9 +52,10 @@ function Addtodos({ setTodos }) {
           required={true}
         ></input>
       </div>
-      <div>
+      <div className="gap">
         <label>Priority no.:</label>
         <input
+          className="inpadd"
           type="number"
           onChange={(e) => setPriority(e.target.value)}
           placeholder="Enter Priority no...."
@@ -59,7 +63,9 @@ function Addtodos({ setTodos }) {
           required={true}
         ></input>
       </div>
-      <Button>Submit📜</Button>
+      <div className="gap addbtn">
+        <Button>Submit📜</Button>
+      </div>
     </form>
   );
 }

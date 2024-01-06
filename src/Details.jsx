@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Button from "./Button";
+import "./Details.css";
 
 function Details({ selectedTodo, todos, setTodos, handleClose }) {
   const [newDetail, setNewDetail] = useState("");
@@ -27,29 +28,39 @@ function Details({ selectedTodo, todos, setTodos, handleClose }) {
     handleClose();
   }
   return (
-    <div>
+    <div className="detail">
       <i class="fa-solid fa-3x fa-xmark" onClick={handleClose}></i>
-      <p>{selectedTodo.paragraph}</p>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Modify Details:</label>
-          <input
-            type="text"
-            placeholder="Enter new details..."
-            value={newDetail}
-            onChange={(e) => setNewDetail(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Status:</label>
-          <select value={status} onChange={(e) => setStatus(e.target.value)}>
-            <option value={"pending"}>Pending🙅‍♀️</option>
-            <option value={"finished"}>Finished✅</option>
-            <option value={"delete"}>Delete 🗑🧹</option>
-          </select>
-        </div>
-        <Button>Update</Button>
-      </form>
+      <p className="para">{selectedTodo.paragraph}</p>
+      <hr />
+      <div className="center-form">
+        <form onSubmit={handleSubmit} className="detail-form">
+          <div className="modify">
+            <label>Modify Details:</label>
+            <input
+              type="text"
+              placeholder="Enter new details..."
+              value={newDetail}
+              onChange={(e) => setNewDetail(e.target.value)}
+              className="inpadd"
+            />
+          </div>
+          <div>
+            <label>Status:</label>
+            <select
+              className="inpadd"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              <option value={"pending"}>Pending🙅‍♀️</option>
+              <option value={"finished"}>Finished✅</option>
+              <option value={"delete"}>Delete 🗑🧹</option>
+            </select>
+          </div>
+          <div className="center">
+            <Button>Update</Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

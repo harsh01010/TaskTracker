@@ -1,6 +1,7 @@
+import "./Button.css";
 function Button({ handleClick, children }) {
   return (
-    <button className="btn" onClick={handleClick}>
+    <button className="button-6" onClick={handleClick}>
       {children}
     </button>
   );

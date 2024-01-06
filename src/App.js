@@ -13,7 +13,7 @@ function App() {
     <div className="App">
       {!selectedTodo && (
         <>
-          <h1>TaskSwift</h1>
+          <h1>Task Swift</h1>
           <Todolist
             todos={todos}
             setTodos={setTodos}

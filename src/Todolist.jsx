@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from "./Button";
 import Addtodos from "./Addtodos";
 import Todo from "./Todo";
+import "./Todolist.css";
 function Todolist({ todos, setTodos, SetSelectedTodo }) {
   const [addNew, setAddNew] = useState(false);
   function handleClick() {
@@ -9,7 +10,7 @@ function Todolist({ todos, setTodos, SetSelectedTodo }) {
   }
   return (
     <>
-      <div>
+      <div className="todo-list">
         {todos.map((todo) => (
           <Todo todo={todo} SetSelectedTodo={SetSelectedTodo} />
         ))}

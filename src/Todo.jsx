@@ -1,4 +1,5 @@
 import Button from "./Button";
+import "./Todo.css";
 function Todo({ todo, SetSelectedTodo }) {
   function handleClick() {
     SetSelectedTodo(todo);
@@ -6,10 +7,14 @@ function Todo({ todo, SetSelectedTodo }) {
     console.log(todo);
   }
   return (
-    <div>
-      <div>
-        <h3>{todo.heading}</h3>
-        <Button handleClick={handleClick}>Open</Button>
+    <div className={todo.state === "finished" ? "todo done" : "todo"}>
+      <h3 className={todo.state === "finished" ? "center cross" : "center"}>
+        {todo.heading[0].toUpperCase() + todo.heading.slice(1)}
+      </h3>
+      <div className="open">
+        <Button handleClick={handleClick}>
+          {todo.state === "finished" ? "Open✔" : "Open"}
+        </Button>
       </div>
       <span>{"Added:" + todo.added}</span>
     </div>
