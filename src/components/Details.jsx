@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Button from "./Button";
-import "./Details.css";
+import "../styles/Details.css";
 
 function Details({ selectedTodo, todos, setTodos, handleClose }) {
   const [newDetail, setNewDetail] = useState("");

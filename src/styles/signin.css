@@ -1,0 +1,92 @@
+.cptr {
+    cursor: pointer;
+    color: white;
+    text-decoration: underline;
+    font-size: large;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 30px;
+    align-items: center;
+    box-shadow: 0 0 10px white;
+    padding: 15px;
+    padding-top: 30px;
+    border-radius: 20px;
+
+}
+
+.form-container>form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    font-size: x-large;
+    background-color: #2d324c;
+    border-radius: 8px;
+    padding: 20px;
+
+}
+
+.form-container>form>span>input {
+    height: 40px;
+    margin-left: 8px;
+    border: 1px solid white;
+    border-radius: 10px;
+    font-size: large;
+}
+
+.fix-btn {
+    width: 80px;
+    height: 40px;
+    border: 1px solid beige;
+    border-radius: 8px;
+    transition: all 0.2s ease-in;
+    font-weight: bold;
+    margin: auto;
+    margin-top: 20px;
+}
+
+.fix-btn:active {
+    transform: scale(1.08);
+}
+
+.btn {
+    width: 100%;
+    height: 40px;
+    border: 1px solid beige;
+    border-radius: 8px;
+    transition: all 0.2s ease-in;
+    font-weight: bold;
+    margin: auto;
+    margin-top: 20px;
+}
+
+.btn:hover {
+    transform: scale(1.08);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-items: flex-end;
+    /* gap: 50px; */
+}
+
+.hold {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    font-size: x-large;
+    background-color: #2d324c;
+    border-radius: 8px;
+    padding: 20px;
+
+}

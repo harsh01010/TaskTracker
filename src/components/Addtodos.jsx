@@ -1,10 +1,15 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "./Button";
-import "./Addtodos.css";
+import "../styles/Addtodos.css";
 function Addtodos({ setTodos }) {
   const [head, setHead] = useState(``);
   const [detail, setDetail] = useState(``);
   const [priority, setPriority] = useState(null);
+
+  const inp = useRef();
+  useEffect(() => {
+    inp.current.focus();
+  }, []);
   function handleSubmit(e) {
     e.preventDefault();
     if (!head || !detail || !priority) return;
@@ -28,6 +33,7 @@ function Addtodos({ setTodos }) {
     setDetail(``);
     setPriority(null);
   }
+
   return (
     <form onSubmit={handleSubmit} className="form">
       <div className="gap">
@@ -39,6 +45,7 @@ function Addtodos({ setTodos }) {
           placeholder="Enter heading..."
           value={head}
           required={true}
+          ref={inp}
         ></input>
       </div>
       <div className="details gap">

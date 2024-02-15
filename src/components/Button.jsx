@@ -1,4 +1,4 @@
-import "./Button.css";
+import "../styles/Button.css";
 function Button({ handleClick, children }) {
   return (
     <button className="button-6" onClick={handleClick}>

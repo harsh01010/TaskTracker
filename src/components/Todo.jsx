@@ -1,5 +1,5 @@
 import Button from "./Button";
-import "./Todo.css";
+import "../styles/Todo.css";
 function Todo({ todo, SetSelectedTodo }) {
   function handleClick() {
     SetSelectedTodo(todo);
