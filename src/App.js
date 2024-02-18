@@ -5,18 +5,20 @@ import Details from "./components/Details";
 import SignIn from "./components/SiginIn";
 import SignUp from "./components/SignUp";
 
-import { auth } from "./firebase";
+import { auth, firestore } from "./firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
 import userImg from "./assets/user.png";
 import x from "./assets/x.png";
+import { collection, getDoc } from "firebase/firestore";
 
 function App() {
   const [selectedTodo, SetSelectedTodo] = useState(null);
-  const [todos, setTodos] = useState(() => {
-    const dataFromLocalStorage = localStorage.getItem("todos");
-    return dataFromLocalStorage ? JSON.parse(dataFromLocalStorage) : [];
-  });
+  // const [todos, setTodos] = useState(() => {
+  //   const dataFromLocalStorage = localStorage.getItem("todos");
+  //   return dataFromLocalStorage ? JSON.parse(dataFromLocalStorage) : [];
+  // });
+  const [todos, setTodos] = useState([]);
 
   const [userLogged, setUserLogged] = useState(null);
 
@@ -25,8 +27,12 @@ function App() {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log(user.uid);
-        setUserLogged(user.email.slice("@"));
+        // console.log(user);
+        // const userId = user.uid;
+        setUserLogged({
+          email: user.email,
+          userId: user.uid,
+        });
       } else {
         //user is signout
       }
@@ -55,11 +61,12 @@ function App() {
       <div className="App">
         {!selectedTodo && (
           <>
-            <User name={userLogged} setUserLogged={setUserLogged} />
+            <User name={userLogged.email} setUserLogged={setUserLogged} />
             <Todolist
               todos={todos}
               setTodos={setTodos}
               SetSelectedTodo={SetSelectedTodo}
+              userId={userLogged.userId}
             />
           </>
         )}
@@ -70,6 +77,7 @@ function App() {
             setTodos={setTodos}
             todos={todos}
             handleClose={closeSelected}
+            userId={userLogged.userId}
           />
         )}
       </div>

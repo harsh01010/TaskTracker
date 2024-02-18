@@ -2,27 +2,75 @@ import { useState } from "react";
 import Button from "./Button";
 import "../styles/Details.css";
 
-function Details({ selectedTodo, todos, setTodos, handleClose }) {
+import { doc, deleteDoc } from "firebase/firestore";
+import { auth, firestore } from "../firebase";
+import { collection, addDoc } from "firebase/firestore";
+
+function Details({ selectedTodo, todos, setTodos, handleClose, userId }) {
   const [newDetail, setNewDetail] = useState("");
   const [status, setStatus] = useState("pending");
-  function handleSubmit(e) {
+  const [updating, setUpdating] = useState(false);
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (status === "delete") {
-      setTodos((e) => e.filter((curr) => curr.id !== selectedTodo.id));
-      handleClose();
-      return;
+    setUpdating(true);
+    // const empTodo = {
+    //   ...selectedTodo,
+    //   state: status,
+    //   paragraph: newDetail !== "" ? newDetail : selectedTodo.paragraph,
+    // };
+
+    const tempTodo = {
+      added: selectedTodo.added,
+      heading: selectedTodo.heading,
+      paragraph: newDetail !== "" ? newDetail : selectedTodo.paragraph,
+      priority: selectedTodo.priority,
+      state: status,
+    };
+
+    const deleteWithId = async (id) => {
+      try {
+        console.log(id);
+        await deleteDoc(doc(firestore, `users/${userId}/todos/${id}`));
+      } catch (e) {
+        throw new Error("cannot Delete at this moment");
+      }
+    };
+    const addNew = async (newTodo) => {
+      try {
+        const userTodoCollection = collection(
+          firestore,
+          `users/${userId}/todos`
+        );
+        await addDoc(userTodoCollection, newTodo);
+      } catch (e) {
+        console.error("cannot todo to the firestore, " + e.code);
+      }
+    };
+
+    if (tempTodo.state === "delete") {
+      // console.log(userId, "deleting");
+      await deleteWithId(selectedTodo.id);
+    } else {
+      console.log(userId, "updating");
+      await deleteWithId(selectedTodo.id);
+      await addNew(tempTodo);
     }
+
+    /*
     setTodos((e) =>
       e.map((curr) =>
         curr.id === selectedTodo.id
           ? {
               ...curr,
               state: status,
-              paragraph: newDetail ? newDetail : curr.paragraph,
+              paragraph: newDetail !== "" ? newDetail : curr.paragraph,
             }
           : curr
       )
     );
+    */
+    setUpdating(false);
     setNewDetail("");
     setStatus("pending");
     handleClose();
@@ -57,7 +105,9 @@ function Details({ selectedTodo, todos, setTodos, handleClose }) {
             </select>
           </div>
           <div className="center">
-            <Button>Update</Button>
+            <Button disabled={updating}>
+              {updating ? "Updating..." : "Update"}
+            </Button>
           </div>
         </form>
       </div>

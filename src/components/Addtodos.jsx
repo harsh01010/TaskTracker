@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import Button from "./Button";
 import "../styles/Addtodos.css";
-function Addtodos({ setTodos }) {
+
+import { collection, addDoc } from "firebase/firestore";
+import { firestore } from "../firebase";
+import { auth } from "../firebase";
+
+function Addtodos({ setTodos, userId }) {
   const [head, setHead] = useState(``);
   const [detail, setDetail] = useState(``);
   const [priority, setPriority] = useState(null);
@@ -10,29 +15,43 @@ function Addtodos({ setTodos }) {
   useEffect(() => {
     inp.current.focus();
   }, []);
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
+    if (adding) return;
     e.preventDefault();
     if (!head || !detail || !priority) return;
+    setAdding(true);
     const newTodo = {
-      id: new Date().getTime(),
       heading: head,
       paragraph: detail,
       priority: priority,
       added: new Date().toISOString().split("T")[0],
       state: "pending",
     };
-    console.log(newTodo);
-    setTodos((todos) => [...todos, newTodo]);
-    setTodos((todos) => {
-      return todos.sort((todo1, todo2) => {
-        return todo2.priority - todo1.priority;
+    // console.log(newTodo);
+
+    try {
+      const userTodoCollection = collection(firestore, `users/${userId}/todos`);
+      const res = await addDoc(userTodoCollection, newTodo);
+      // console.log(res.id);
+
+      setTodos((todos) => [...todos, { ...newTodo, id: res.id }]);
+      setTodos((todos) => {
+        console.log(todos);
+        return todos.sort((todo1, todo2) => {
+          return todo2.priority - todo1.priority;
+        });
       });
-    });
+    } catch (e) {
+      console.error("cannot todo to the firestore, " + e.code);
+    }
 
     setHead(``);
     setDetail(``);
     setPriority(null);
+    setAdding(false);
   }
+
+  const [adding, setAdding] = useState(false);
 
   return (
     <form onSubmit={handleSubmit} className="form">
@@ -71,7 +90,7 @@ function Addtodos({ setTodos }) {
         ></input>
       </div>
       <div className="gap addbtn">
-        <Button>Submit📜</Button>
+        <Button disabled={adding}>{adding ? "Adding..." : "Submit📜"}</Button>
       </div>
     </form>
   );
