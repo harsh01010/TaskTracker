@@ -4,7 +4,7 @@ import "../styles/signin.css";
 import { auth, provider } from "../firebase";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 
-const SignIn = ({ setShowLogin }) => {
+const SignIn = ({ setShowLogin, setShowAuth }) => {
   const [details, setDetails] = useState({
     email: "",
     password: "",
@@ -16,7 +16,8 @@ const SignIn = ({ setShowLogin }) => {
     setWaiting(true);
     try {
       const response = await signInWithPopup(auth, provider);
-      console.log(response.user);
+      // console.log(response.user);
+      setShowAuth(false);
     } catch (err) {
       const message = err.code.split("/")[1];
       setErrorMessage(message);
@@ -41,7 +42,8 @@ const SignIn = ({ setShowLogin }) => {
         details.email,
         details.password
       );
-      console.log(response.user);
+      setShowAuth(false);
+      // console.log(response.user);
     } catch (err) {
       const message = err.code.split("/")[1];
       setErrorMessage(message);

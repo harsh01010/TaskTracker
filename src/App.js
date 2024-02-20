@@ -20,9 +20,13 @@ function App() {
   // });
   const [todos, setTodos] = useState([]);
 
-  const [userLogged, setUserLogged] = useState(null);
+  const [userLogged, setUserLogged] = useState({
+    email: null,
+    userId: null,
+  });
 
-  const [showLogin, setShowLogin] = useState(true);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showAuth, setShowAuth] = useState(false);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -37,7 +41,7 @@ function App() {
         //user is signout
       }
     });
-  }, []);
+  }, [showLogin]);
   function closeSelected() {
     SetSelectedTodo(null);
   }
@@ -46,13 +50,13 @@ function App() {
   }
   useEffect(updatedLocalStorage, [todos]);
 
-  if (!userLogged) {
+  if (showAuth) {
     return (
       <div className="App">
         {showLogin ? (
-          <SignIn setShowLogin={setShowLogin} />
+          <SignIn setShowLogin={setShowLogin} setShowAuth={setShowAuth} />
         ) : (
-          <SignUp setShowLogin={setShowLogin} />
+          <SignUp setShowLogin={setShowLogin} setShowAuth={setShowAuth} />
         )}
       </div>
     );
@@ -61,12 +65,13 @@ function App() {
       <div className="App">
         {!selectedTodo && (
           <>
-            <User name={userLogged.email} setUserLogged={setUserLogged} />
+            <User name={userLogged?.email} setUserLogged={setUserLogged} />
             <Todolist
               todos={todos}
               setTodos={setTodos}
               SetSelectedTodo={SetSelectedTodo}
-              userId={userLogged.userId}
+              userId={userLogged?.userId}
+              setShowLogin={setShowAuth}
             />
           </>
         )}
@@ -87,28 +92,43 @@ function App() {
 
 const User = ({ name, setUserLogged }) => {
   const [showOptions, setShowOptions] = useState(false);
+  const [showUser, setShowUser] = useState(name !== null);
   return (
     <div className="user">
       <h1>Task Swift</h1>
-      <div>
-        {" "}
-        <img
-          src={showOptions ? x : userImg}
-          onClick={() => setShowOptions((curr) => !curr)}
-        />{" "}
-      </div>
-      {showOptions && <UserOptions name={name} setUserLogged={setUserLogged} />}
+      {showUser && (
+        <>
+          <div>
+            {" "}
+            <img
+              src={showOptions ? x : userImg}
+              onClick={() => setShowOptions((curr) => !curr)}
+            />{" "}
+          </div>
+          {showOptions && (
+            <UserOptions
+              name={name}
+              setUserLogged={setUserLogged}
+              setShowUser={setShowUser}
+            />
+          )}
+        </>
+      )}
     </div>
   );
 };
 
-const UserOptions = ({ name, setUserLogged }) => {
+const UserOptions = ({ name, setUserLogged, setShowUser }) => {
   const [waiting, setWaiting] = useState(false);
   async function handleClick() {
     setWaiting(true);
     try {
       await signOut(auth);
-      setUserLogged(null);
+      setUserLogged({
+        email: null,
+        userId: null,
+      });
+      setShowUser(false);
     } catch (e) {
       alert("can't sign out!");
     }

@@ -5,7 +5,7 @@ import "../styles/signin.css";
 import { auth, provider } from "../firebase";
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 
-const SignUp = ({ setShowLogin }) => {
+const SignUp = ({ setShowLogin, setShowAuth }) => {
   const [details, setDetails] = useState({
     email: "",
     password: "",

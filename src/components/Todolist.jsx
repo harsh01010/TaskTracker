@@ -7,11 +7,15 @@ import "../styles/Todolist.css";
 import { collection, getDocs } from "firebase/firestore";
 import { doc, deleteDoc } from "firebase/firestore";
 import { auth, firestore } from "../firebase";
-function Todolist({ todos, setTodos, SetSelectedTodo, userId }) {
+
+function Todolist({ todos, setTodos, SetSelectedTodo, userId, setShowLogin }) {
   const [addNew, setAddNew] = useState(false);
   function handleClick() {
     setAddNew((p) => !p);
   }
+  const showLoginPage = () => {
+    setShowLogin((curr) => true);
+  };
   const [deleting, setDeleting] = useState(false);
   const deleteWithId = async (id) => {
     try {
@@ -65,21 +69,23 @@ function Todolist({ todos, setTodos, SetSelectedTodo, userId }) {
 
   return (
     <>
-      <div className="todo-list">
-        {!fetching ? (
-          todos.map((todo) => (
-            <Todo todo={todo} SetSelectedTodo={SetSelectedTodo} />
-          ))
-        ) : (
-          <div>
-            <p>Fetching...</p>
-          </div>
-        )}
-      </div>
+      {userId !== null && (
+        <div className="todo-list">
+          {!fetching ? (
+            todos.map((todo) => (
+              <Todo todo={todo} SetSelectedTodo={SetSelectedTodo} />
+            ))
+          ) : (
+            <div>
+              <p>Fetching...</p>
+            </div>
+          )}
+        </div>
+      )}
       {addNew && <Addtodos setTodos={setTodos} userId={userId} />}
       <div className="handlers">
-        <Button handleClick={handleClick}>
-          {addNew ? "Close" : "Add New"}
+        <Button handleClick={userId !== null ? handleClick : showLoginPage}>
+          {userId !== null ? (addNew ? "Close" : "Add New") : "Sigin up/in"}
         </Button>
         {todos.length > 0 && (
           <Button handleClick={clearList}>
