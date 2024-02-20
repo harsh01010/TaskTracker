@@ -96,11 +96,12 @@
 
     .form-container {
 
-        margin-top: 20px;
+        margin-top: 10vh;
         box-shadow: 0 0 6px white;
-        padding: 10px;
+        padding: 5px;
         padding-top: 10px;
         border-radius: 20px;
+        gap: 10px;
 
     }
 
@@ -110,9 +111,19 @@
         font-size: medium;
         background-color: #2d324c;
         border-radius: 8px;
-        padding: 10px;
+        padding: 4px;
 
     }
+
+    .form-container>form>span>input {
+        height: 38px;
+        margin-left: 5px;
+        border: 1px solid white;
+        border-radius: 10px;
+        font-size: medium;
+    }
+
+
 
 
 }
