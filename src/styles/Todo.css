@@ -17,6 +17,10 @@
 
 }
 
+.todo::-webkit-scrollbar {
+    width: 0px;
+}
+
 .open {
     display: flex;
     justify-content: center;

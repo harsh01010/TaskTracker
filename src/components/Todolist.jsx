@@ -2,6 +2,7 @@ import { useState, useEffect, useId } from "react";
 import Button from "../components/Button";
 import Addtodos from "../components/Addtodos";
 import Todo from "../components/Todo";
+import Loader from "./Loader";
 import "../styles/Todolist.css";
 
 import { collection, getDocs } from "firebase/firestore";
@@ -80,8 +81,8 @@ function Todolist({ todos, setTodos, SetSelectedTodo, userId, setShowLogin }) {
               <Todo todo={todo} SetSelectedTodo={SetSelectedTodo} />
             ))
           ) : (
-            <div>
-              <p>Fetching...</p>
+            <div className="load">
+              <Loader />
             </div>
           )}
         </div>
@@ -91,7 +92,7 @@ function Todolist({ todos, setTodos, SetSelectedTodo, userId, setShowLogin }) {
         <Button handleClick={userId !== null ? handleClick : showLoginPage}>
           {userId !== null ? (addNew ? "Close" : "Add New") : "Sigin up/in"}
         </Button>
-        {todos.length > 0 && (
+        {userId !== null && todos.length > 0 && (
           <Button handleClick={clearList}>
             {deleting ? "clearing..." : " Clear All"}
           </Button>

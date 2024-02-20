@@ -11,13 +11,24 @@
     width: 0px;
 }
 
-@media (max-width: 768px) {
-    .todo-list {
-        grid-template-columns: 1fr 1fr;
-    }
-}
 
 .handlers {
     display: flex;
     gap: 20px;
+}
+
+.load {
+    display: flex;
+    margin-left: 48vw;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .todo-list {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .load {
+        margin-left: 40vw;
+    }
 }
