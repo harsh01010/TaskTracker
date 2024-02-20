@@ -9,6 +9,7 @@ import { doc, deleteDoc } from "firebase/firestore";
 import { auth, firestore } from "../firebase";
 
 function Todolist({ todos, setTodos, SetSelectedTodo, userId, setShowLogin }) {
+  // console.log("hi", userId);
   const [addNew, setAddNew] = useState(false);
   function handleClick() {
     setAddNew((p) => !p);
@@ -38,8 +39,10 @@ function Todolist({ todos, setTodos, SetSelectedTodo, userId, setShowLogin }) {
   const [fetching, setFetching] = useState(true);
 
   const fetchTodos = async () => {
-    setFetching(true);
     try {
+      setFetching(true);
+      console.log("trying");
+
       const userTodosCollection = collection(
         firestore,
         `users/${userId}/todos`
@@ -58,14 +61,15 @@ function Todolist({ todos, setTodos, SetSelectedTodo, userId, setShowLogin }) {
         });
       });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
+    } finally {
+      setFetching(false);
     }
-    setFetching(false);
   };
   useEffect(() => {
-    console.log(userId);
+    // console.log(userId);
     if (userId !== null) fetchTodos(userId);
-  }, []);
+  }, [userId]);
 
   return (
     <>

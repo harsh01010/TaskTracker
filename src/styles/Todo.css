@@ -10,6 +10,10 @@
     padding-bottom: 5px;
     border-radius: 8px;
     box-shadow: 2px -2px 0px #f2f2f2;
+    max-width: 160px;
+    max-height: 130px;
+    overflow-wrap: break-word;
+    overflow-y: auto;
 
 }
 
@@ -28,4 +32,12 @@
     text-decoration: line-through;
     text-decoration-color: rgb(6, 7, 6);
     text-decoration-thickness: 5px;
+}
+
+@media (max-width: 768px) {
+    .todo {
+        padding-left: 8px;
+        padding-right: 8px;
+        padding-bottom: 2px;
+    }
 }

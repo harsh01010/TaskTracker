@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
-import "./styles/App.css";
+import { auth } from "./firebase";
+import { onAuthStateChanged } from "firebase/auth";
+
 import Todolist from "./components/Todolist";
 import Details from "./components/Details";
 import SignIn from "./components/SiginIn";
 import SignUp from "./components/SignUp";
+import User from "./components/User";
 
-import { auth, firestore } from "./firebase";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-
-import userImg from "./assets/user.png";
-import x from "./assets/x.png";
-import { collection, getDoc } from "firebase/firestore";
+import "./styles/App.css";
 
 function App() {
   const [selectedTodo, SetSelectedTodo] = useState(null);
@@ -19,37 +17,37 @@ function App() {
   //   return dataFromLocalStorage ? JSON.parse(dataFromLocalStorage) : [];
   // });
   const [todos, setTodos] = useState([]);
-
+  const [showLogin, setShowLogin] = useState(true);
+  const [showAuth, setShowAuth] = useState(false);
+  const [showUser, setShowUser] = useState(false);
   const [userLogged, setUserLogged] = useState({
     email: null,
     userId: null,
   });
 
-  const [showLogin, setShowLogin] = useState(false);
-  const [showAuth, setShowAuth] = useState(false);
+  function closeSelected() {
+    SetSelectedTodo(null);
+  }
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // console.log(user);
-        // const userId = user.uid;
         setUserLogged({
           email: user.email,
           userId: user.uid,
         });
+        setShowUser(true);
       } else {
-        //user is signout
       }
     });
-  }, [showLogin]);
-  function closeSelected() {
-    SetSelectedTodo(null);
-  }
+  }, []);
+
+  /*
   function updatedLocalStorage() {
     localStorage.setItem("todos", JSON.stringify(todos));
   }
   useEffect(updatedLocalStorage, [todos]);
-
+  */
   if (showAuth) {
     return (
       <div className="App">
@@ -65,12 +63,17 @@ function App() {
       <div className="App">
         {!selectedTodo && (
           <>
-            <User name={userLogged?.email} setUserLogged={setUserLogged} />
+            <User
+              name={userLogged.email}
+              setUserLogged={setUserLogged}
+              showUser={showUser}
+              setShowUser={setShowUser}
+            />
             <Todolist
               todos={todos}
               setTodos={setTodos}
               SetSelectedTodo={SetSelectedTodo}
-              userId={userLogged?.userId}
+              userId={userLogged.userId}
               setShowLogin={setShowAuth}
             />
           </>
@@ -89,67 +92,5 @@ function App() {
     );
   }
 }
-
-const User = ({ name, setUserLogged }) => {
-  const [showOptions, setShowOptions] = useState(false);
-  const [showUser, setShowUser] = useState(name !== null);
-  return (
-    <div className="user">
-      <h1>Task Swift</h1>
-      {showUser && (
-        <>
-          <div>
-            {" "}
-            <img
-              src={showOptions ? x : userImg}
-              onClick={() => setShowOptions((curr) => !curr)}
-            />{" "}
-          </div>
-          {showOptions && (
-            <UserOptions
-              name={name}
-              setUserLogged={setUserLogged}
-              setShowUser={setShowUser}
-            />
-          )}
-        </>
-      )}
-    </div>
-  );
-};
-
-const UserOptions = ({ name, setUserLogged, setShowUser }) => {
-  const [waiting, setWaiting] = useState(false);
-  async function handleClick() {
-    setWaiting(true);
-    try {
-      await signOut(auth);
-      setUserLogged({
-        email: null,
-        userId: null,
-      });
-      setShowUser(false);
-    } catch (e) {
-      alert("can't sign out!");
-    }
-
-    setWaiting(false);
-  }
-
-  return (
-    <div className="options">
-      {!waiting ? (
-        <>
-          <span>Hi,{name}</span>
-          <span className="decorated" onClick={handleClick}>
-            Log Out &rarr;
-          </span>
-        </>
-      ) : (
-        <span>Signing Out...</span>
-      )}
-    </div>
-  );
-};
 
 export default App;
